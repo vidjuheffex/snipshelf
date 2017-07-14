@@ -3,8 +3,12 @@ var router = express.Router();
 var expressValidator = require('express-validator');
 var pwd = require('pwd');
 var User = require('../models/User');
+var signupValidator = require('../validators/validator-signup');
 
 router.use(expressValidator());
+
+function hashPass(req,res,next){
+}
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -15,9 +19,23 @@ router.get('/login', (req,res,next) => {
   res.render('login', {});
 });
 
-router.post('login', (req,res, next)=>{
-  let username = req.body.username;
-  let password = req.body.password;
+router.post('/login', (req,res, next)=>{
+  return User.findOne({username: req.body.username})
+    .then(user => {
+      if(user){
+        return pwd.hash(req.body.password, user.salt)
+          .then(result => {
+            if(user.hash == result.hash){
+              req.session.user = user;
+              return res.redirect("/users/snippets");
+            }
+            else
+              return res.redirect("login");
+          });           
+      }
+      else
+        return res.redirect("/login");
+    });
 });
 
 router.get('/signup', (req,res,next)=>{
@@ -25,37 +43,29 @@ router.get('/signup', (req,res,next)=>{
 });
 
 router.post('/signup', (req,res,next) => {
-  req.checkBody({'password':
-                 {
-                   notEmpty: {
-                     options: true,
-                     errorMessage: "Password can't be empty."
-                   },
-                   matches: {
-                     options: [ req.body.passwordConfirm ],
-                     errorMessage: "Passwords don't match"
-                   }
-                 }
-                });
+  req.checkBody(new signupValidator(req.body.passwordConfirm));
   req.getValidationResult()
     .then(result => {
       if (result.array().length == 0) {
-        createAccount(req.body.username, req.body.password, res)
+        return createAccount(req.body.username, req.body.password)
           .then(result => {
-            res.redirect("/login");
+            return res.redirect("/login");
           })
           .catch(err => {
-            res.redirect("/signup");
+            return res.redirect("/signup");
           });
       }
       else {
-        res.redirect("/signup");
+        return res.redirect("/signup");
       }
+    })
+    .catch(err => {
+      next(err);
     });
 });
 
 
-function createAccount(username, password, res){
+function createAccount(username, password){
   return pwd.hash(password)
     .then(result => {
       let user = new User({username: username, hash: result.hash, salt: result.salt});
