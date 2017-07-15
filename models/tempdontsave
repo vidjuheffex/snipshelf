@@ -1,0 +1,33 @@
+//result from express-validator
+
+[ { param: 'password',
+    msg: 'Passwords don\'t match',
+    value: 'sdfsd' } ]
+
+//here it is with two items
+[ { param: 'password',
+    msg: 'Password can\'t be empty.',
+    value: '' },
+  { param: 'password',
+    msg: 'Passwords don\'t match',
+    value: '' } ]
+
+
+//result from mongoose validator
+var errors = {
+username:
+   {
+     message: 'Username already exists',
+     name: 'ValidatorError',
+     properties:
+      { type: 'user defined',
+        validator: [Function: validator],
+        message: 'Username already exists',
+        path: 'username',
+        value: 'admin' },
+     kind: 'user defined',
+     path: 'username',
+     value: 'admin',
+     reason: undefined,
+     '$isValidatorError': true }
+};

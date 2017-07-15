@@ -3,13 +3,37 @@
   <head>
     <meta charset="UTF-8"/>
     <title>Document</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" type ="text/css">
+    <link href="/stylesheets/login.css" rel="stylesheet" type="text/css"
   </head>
   <body>
-    <form action="/signup" method="post">
-      <input name="username" type="text" placeholder="Username">
-      <input name="password" type="password" placeholder="Password">
-      <input name="passwordConfirm" type="password" placeholder="Confirm Password">
-      <button type="submit">Login</button>
-    </form>
+    <div class="content">
+      <div class="bar">
+        <h1>Signup</h1>
+        <form action="/signup" method="post" id="signup_form">
+          <div class="username_input_wrapper">
+            <input name="username" type="text" placeholder="Username">
+          </div>
+          <div class="error">
+            {{#errors.username}}
+              <div>{{msg}}</div>
+            {{/errors.username}}
+          </div>
+          <div class="input_wrapper">
+            <input name="password" type="password" placeholder="Password">
+          </div>
+          <div class="error">
+            {{#errors.password}}
+              <div>{{msg}}</div>
+            {{/errors.password}}
+          </div>
+          <div class="input_wrapper">
+            <input name="passwordConfirm" type="password" placeholder="Confirm Password">
+          </div>
+          <div class="button" onclick="document.forms.namedItem('signup_form').submit();" >Signup</div>
+          <input type="submit" hidden>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

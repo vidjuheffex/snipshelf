@@ -4,11 +4,9 @@ var expressValidator = require('express-validator');
 var pwd = require('pwd');
 var User = require('../models/User');
 var signupValidator = require('../validators/validator-signup');
+var SimpleError = require('../utils/simple-error');
 
 router.use(expressValidator());
-
-function hashPass(req,res,next){
-}
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -16,10 +14,12 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/login', (req,res,next) => {
-  res.render('login', {});
+  res.render('login', {errors: req.session.sessionErrObj});
 });
 
 router.post('/login', (req,res, next)=>{
+  let sessionErrObj = SimpleError.create();
+  req.session.sessionErrObj = sessionErrObj;
   return User.findOne({username: req.body.username})
     .then(user => {
       if(user){
@@ -30,32 +30,49 @@ router.post('/login', (req,res, next)=>{
               return res.redirect("/users/snippets");
             }
             else
-              return res.redirect("login");
+              sessionErrObj.createOrUpdateProperty("password", "Password incorrect");
+            return res.redirect("login");
           });           
       }
       else
+        sessionErrObj.createOrUpdateProperty("username", "Username not found");
         return res.redirect("/login");
+    })
+    .catch(err => {
+      next(err);
     });
 });
 
 router.get('/signup', (req,res,next)=>{
-  res.render('signup', {});
+  res.render('signup', {errors: req.session.sessionErrObj});
 });
 
 router.post('/signup', (req,res,next) => {
+  let sessionErrObj = SimpleError.create();
+  req.session.sessionErrObj = sessionErrObj;
   req.checkBody(new signupValidator(req.body.passwordConfirm));
   req.getValidationResult()
     .then(result => {
       if (result.array().length == 0) {
         return createAccount(req.body.username, req.body.password)
           .then(result => {
-            return res.redirect("/login");
+            if(!result.errors)
+              return res.redirect("/login");
+            else {
+              for (let x in result.errors){
+                sessionErrObj.createOrUpdateProperty(x, result.errors[x].properties.message);
+              }
+              return res.redirect("/signup");
+            }
           })
           .catch(err => {
-            return res.redirect("/signup");
+            next(err);
           });
       }
       else {
+        for (let x in result.mapped()){
+          sessionErrObj.createOrUpdateProperty(x, result.mapped()[x].msg);
+        }
         return res.redirect("/signup");
       }
     })
@@ -72,7 +89,7 @@ function createAccount(username, password){
       return user.save();
     })
     .catch(err => {
-      throw err;
+      return err;
     });
 }
 

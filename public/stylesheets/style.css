@@ -1,8 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: monospace;
+  background: rgb(73,72,62)
+}
+
+h1 {
+  color: rgb(166,226,46);
 }
 
 a {
-  color: #00B7FF;
+  color: rgb(102,217,239);
 }

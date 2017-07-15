@@ -1,0 +1,40 @@
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.fontIcon {
+    font-size: 20rem;
+    color: rgb(249,38,114);
+    position: absolute;
+    bottom: -1rem;
+    left: 20%;
+    z-index: 0;
+}
+
+.bar {
+  background: rgb(39,40,34);
+  width: 100%;
+  z-index: 100;
+  padding: 1rem;
+  position: relative;
+}
+
+.button {
+  padding: .25rem;
+}

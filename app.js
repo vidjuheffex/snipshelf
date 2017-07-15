@@ -1,3 +1,4 @@
+//core dependencies
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,14 +9,16 @@ var session = require(('express-session'));
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+//routes
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-console.log(app.locals);
+
+//mongodb setup
 mongoose.connect("mongodb://localhost/snippetsDB", {useMongoClient: true})
   .then(() => {
-    console.log("Connected to database");
+    console.log("Connected To MongoDB");
   })
   .catch(err => {
     throw err;
@@ -30,11 +33,12 @@ app.engine('mustache', mustacheExpress());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'mustache');
 
+//session setup
 app.use(session(sessionConfig));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));

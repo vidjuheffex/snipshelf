@@ -1,6 +1,6 @@
 module.exports = function(passwordConfirm){
     return {
-      password:
+      'password':
       {
         notEmpty: {
           options: true,

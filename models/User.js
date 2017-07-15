@@ -17,4 +17,21 @@ const UserSchema = new Schema({
   }
 });
 
+UserSchema.path('username').validate({
+  validator: function(value){
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
+      this.model("User").count({ username: value }, (err, count)=> {
+        if(count > 0)
+          resolve(false);
+        else
+          resolve(true);
+      });
+      }, 0);
+    });
+  },
+  message: "Username already exists"
+});
+
 module.exports = mongoose.model("User", UserSchema);
+
