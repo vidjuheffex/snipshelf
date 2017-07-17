@@ -30,6 +30,10 @@ router.get('/snippets', (req,res,next)=>{
     searchObj.language = req.query.filter;
   }
 
+  if(req.query.tag){
+    searchObj.tags = req.query.tag;
+  }
+
   Snippet.find(searchObj)
     .then( snippets => {
       return res.render("snippets", {snippets: snippets});

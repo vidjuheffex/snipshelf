@@ -30,6 +30,16 @@
           <div class="input_wrapper">
             <input name="passwordConfirm" type="password" placeholder="Confirm Password">
           </div>
+          <div class="error">
+          </div>
+          <div class="input_wrapper">
+            <input name="secret" type="text" placeholder="Enter API Secret">
+          </div>
+          <div class="error">
+            {{#errors.secret}}
+              <div>{{msg}}</div>
+            {{/errors.secret}}
+          </div>
           <div class="button" onclick="document.forms.namedItem('signup_form').submit();" >Signup</div>
           <input type="submit" hidden>
         </form>

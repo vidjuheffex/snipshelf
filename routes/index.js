@@ -5,6 +5,7 @@ var pwd = require('pwd');
 var User = require('../models/User');
 var signupValidator = require('../validators/validator-signup');
 var SimpleError = require('../utils/simple-error');
+var secret = require('../config/config-secret');
 
 router.use(expressValidator());
 
@@ -50,7 +51,7 @@ router.get('/signup', (req,res,next)=>{
 router.post('/signup', (req,res,next) => {
   let sessionErrObj = SimpleError.create();
   req.session.sessionErrObj = sessionErrObj;
-  req.checkBody(new signupValidator(req.body.passwordConfirm));
+  req.checkBody(new signupValidator(req.body.passwordConfirm, secret));
   req.getValidationResult()
     .then(result => {
       if (result.array().length == 0) {
