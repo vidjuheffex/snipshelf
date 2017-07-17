@@ -4,8 +4,35 @@
     <meta charset="UTF-8"/>
     <title>Document</title>
     <link href="/stylesheets/style.css" rel="stylesheet" type ="text/css">
+    <link href="/stylesheets/snippets.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
     <a href="/users/createsnippet">Create A  New Snippet</a>
+    <h1>Snippets</h1>
+    <a href="/users/snippets">View All</a>
+    <a href="/users/snippets?filter=javascript">Javascript Only</a>
+    <a href="/users/snippets?filter=python">Python Only</a>
+    {{#snippets}}
+      <div class="snippet_wrapper">
+        <div class="snippet">
+          <div class="snippetHeader">
+            <img src="/images/{{language}}.png"><h2>{{title}}</h2><div class="delete button" data-id="{{_id}}">delete</div>
+          </div>
+          <div class="snippet_code">
+            <pre><code class="{{language}}">{{document}}</code></pre>
+          </div>
+          <div class="tags">
+            {{#tags}}
+              <a href="/users/snippets?tag={{.}}">{{.}}</a>
+              {{/tags}}
+          </div>
+        </div>
+      </div>
+    {{/snippets}}
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/javascripts/snippets.js"></script>
+
   </body>
 </html>

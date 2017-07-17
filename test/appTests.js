@@ -6,11 +6,6 @@ chai.use(chaiHttp);
 
 const testData = require("../config/config-test.js");
 
-/*let status = app.get("mongoose-status");
-  while(!status){
-  status = app.get("mongoose-status");
-  console.log(status);
-  };*/
 const mongoose = require('mongoose');
 
 describe("API TESTS", () => {

@@ -76,3 +76,8 @@ input, option,select {
 .disabled {
   opacity: .5;
 }
+
+.tag_bar input {
+  width: 100%;
+  border: none;
+}
