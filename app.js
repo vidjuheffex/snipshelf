@@ -8,6 +8,7 @@ var mustacheExpress = require('mustache-express');
 var session = require(('express-session'));
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+var dbConfig = require('./config/config-database.js');
 
 //routes
 var index = require('./routes/index');
@@ -16,7 +17,7 @@ var users = require('./routes/users');
 var app = express();
 
 //mongodb setup
-mongoose.connect("mongodb://localhost/snippetsDB", {useMongoClient: true})
+mongoose.connect(`mongodb://${dbConfig.username}:${dbConfig.password}@ds023054.mlab.com:23054/${dbConfig.username}`, {useMongoClient: true})
   .then(() => {
     console.log("Connected To MongoDB");
   })
