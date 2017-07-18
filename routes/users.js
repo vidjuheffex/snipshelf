@@ -44,7 +44,6 @@ router.get('/snippets', (req,res,next)=>{
 });
 
 router.post('/snippets', (req,res,next)=>{
-  console.log(req.body);
   let snippet = new Snippet({user: req.session.user._id,
                              title: req.body.title,
                              language: req.body.language,
@@ -69,7 +68,13 @@ router.delete("/snippets/:id", (req, res,next)=>{
       if (snippet.user == req.session.user._id){
         snippet.remove()
           .then(deletedSnippet => {
-            return res.redirect("/users/snippets");
+            if(deletedSnippet){
+              return res.redirect("/users/snippets");
+            }
+            else {
+              let err = new Error("message not found");
+              return err;
+            }
           })
           .catch(err=>{
             next(err);
