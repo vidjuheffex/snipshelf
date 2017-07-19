@@ -17,7 +17,9 @@ var users = require('./routes/users');
 var app = express();
 
 //mongodb setup
-mongoose.connect(`mongodb://${dbConfig.username}:${dbConfig.password}@ds023054.mlab.com:23054/${dbConfig.username}`, {useMongoClient: true})
+//mongoose.connect(`mongodb://${dbConfig.username}:${dbConfig.password}@ds023054.mlab.com:23054/${dbConfig.username}`, {useMongoClient: true})
+
+mongoose.connect(`mongodb://localhost:27017/snippetsDB`, {useMongoClient: true})
   .then(() => {
     console.log("Connected To MongoDB");
   })
