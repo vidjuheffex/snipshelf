@@ -5,6 +5,7 @@ var chaiAsPromised = require("chai-as-promised");
 const expect = chai.expect;
 chai.use(chaiHttp);
 chai.use(chaiAsPromised);
+chai.should();
 const secret = require('../config/config-secret.js');
 
 const testData = require("../config/config-test.js");
@@ -100,6 +101,7 @@ describe("API TESTS", () => {
               .send({title: "11222zzxcvtest_snippet", language: "javascript", "document": "document"})
               .then(res => {
                 expect(res).to.redirectTo(`${res.request.protocol}//${res.request.host}/users/snippets`);
+                Snippet.findOne({title: "11222zzxcvtest_snippet"}).should.eventually.be.an("Object");
               });
           })
           .catch(err => {
